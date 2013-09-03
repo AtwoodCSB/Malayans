@@ -18,8 +18,9 @@ public class RegisterManager {
 	private PortManager portManager 								= null;
 	private Logger logger											= null;
 	private boolean isInit											= false;
+	private RegisterThread registThread 							= null;
 	
-	private RegisterManager () {}
+	private RegisterManager () {}	
 	
 	private static class RegisterManagerHolder {
 		public static RegisterManager instance = new RegisterManager();
@@ -31,11 +32,20 @@ public class RegisterManager {
 	
 	public void init() {
 		if (!isInit) {
-			modulesIP 					= new HashMap<String, Integer>();
-			modules 					= new HashMap<String, ModuleInterface>();
-			portManager 				= PortManager.getInstance();
-			logger 						= Logger.getLogger(RegisterManager.class);
+			modulesIP 			= new HashMap<String, Integer>();
+			modules 			= new HashMap<String, ModuleInterface>();
+			portManager 		= PortManager.getInstance();
+			logger 				= Logger.getLogger(RegisterManager.class);
 		}
+	}
+	
+	public void start() {
+		if (registThread != null) {
+			registThread.closeSocket();
+			registThread.interrupt();
+		} 
+		registThread = new RegisterThread();
+		registThread.start();
 	}
 	
 	/**

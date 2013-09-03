@@ -9,7 +9,14 @@ public class RMIManager {
 	private RegisterManager registerManager				= null;
 	private PortManager portManager						= null;
 	
-	private RMIManager(){}
+	private static final String DESCRIPTION	= 
+			"这是管理所有模块的模块，也是系统的核心，就是这样！";
+	
+	private RMIManager(){
+		settingManager = SettingManager.getInstance();
+		registerManager = RegisterManager.getInstance();
+		portManager = PortManager.getInstance();
+	}
 	
 	private static class RMIManagerHolder {
 		public static RMIManager instance = new RMIManager();
@@ -20,13 +27,7 @@ public class RMIManager {
 	}
 	
 	public void start() {
-		settingManager.init();
-		registerManager.init();
-		portManager.init();
-	}
-
-	public void end() {
-		
+		registerManager.start();
 	}
 
 	public void restart() {		
@@ -45,12 +46,18 @@ public class RMIManager {
 	}
 
 	public String getDescription() {
-		return null;
+		return DESCRIPTION;
 	}
 
 	public void init() {
-		settingManager = SettingManager.getInstance();
-		registerManager = RegisterManager.getInstance();
-		portManager = PortManager.getInstance();
+		settingManager.init();
+		registerManager.init();
+		portManager.init();
+	}
+	
+	public static void main(String[] args) {
+		RMIManager rmiManager = new RMIManager();
+		rmiManager.init();
+		rmiManager.start();
 	}
 }

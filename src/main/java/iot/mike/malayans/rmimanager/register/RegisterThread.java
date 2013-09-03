@@ -11,7 +11,7 @@ import java.net.Socket;
 
 import org.apache.log4j.Logger;
 
-public class RegisterRunnable implements Runnable {
+public class RegisterThread extends Thread{
 	
 	private Logger logger 								= null;
 	private ServerSocket serverSocket 					= null;
@@ -20,19 +20,19 @@ public class RegisterRunnable implements Runnable {
 	private RegisterManager registerManager				= null;
 	
 	public void init () {
-		logger = Logger.getLogger(RegisterRunnable.class);
+		logger = Logger.getLogger(RegisterThread.class);
 		portManager = PortManager.getInstance();
 	}
 	
 	@Override
 	public void run () {
 		if (logger == null) {
-			logger = Logger.getLogger(RegisterRunnable.class);
+			logger = Logger.getLogger(RegisterThread.class);
 		}
 		
 		try {
 			serverSocket = new ServerSocket(Setting.int_DataInPort);
-			while (true) {
+			while (!Thread.interrupted()) {
 				try {
 					clientSocket = serverSocket.accept();
 					DataOutputStream writer = 
@@ -69,5 +69,12 @@ public class RegisterRunnable implements Runnable {
 			catch (IOException e) {}
 			serverSocket = null;
 		}
+	}
+	
+	public void closeSocket() {
+		try {
+			serverSocket.close();
+			serverSocket = null;
+		} catch (Exception e) {}
 	}
 }
