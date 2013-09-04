@@ -13,19 +13,23 @@ import org.apache.log4j.Logger;
 
 public class RegisterThread extends Thread{
 	
-	private Logger logger 								= null;
-	private ServerSocket serverSocket 					= null;
-	private Socket clientSocket							= null;
-	private PortManager	portManager 					= null;
-	private RegisterManager registerManager				= null;
-	
+	private Logger 					logger 					= null;
+	private ServerSocket 			serverSocket 			= null;
+	private Socket 					clientSocket			= null;
+	private PortManager				portManager 			= null;
+	private RegisterManager 		registerManager			= null;
+
 	public void init () {
 		logger = Logger.getLogger(RegisterThread.class);
 		portManager = PortManager.getInstance();
+		portManager.init();
+		registerManager = RegisterManager.getInstance();
+		registerManager.init();
 	}
 	
 	@Override
 	public void run () {
+		init();
 		if (logger == null) {
 			logger = Logger.getLogger(RegisterThread.class);
 		}
@@ -41,9 +45,8 @@ public class RegisterThread extends Thread{
 							new DataInputStream(clientSocket.getInputStream());
 					
 					String moduleinfoStr = reader.readUTF();
-					
+					logger.info(moduleinfoStr);
 					ModuleInfo moduleInfo = RegisterUtil.getModule(moduleinfoStr);
-					
 					int port = portManager.getPort();
 					
 					String order = RegisterUtil.getPortJsonStr(port);
@@ -64,10 +67,6 @@ public class RegisterThread extends Thread{
 		} catch (IOException e) {
 			logger.warn("ServerSocket is down!");
 			System.exit(0);
-		} finally {
-			try {serverSocket.close();} 
-			catch (IOException e) {}
-			serverSocket = null;
 		}
 	}
 	

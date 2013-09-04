@@ -7,12 +7,11 @@ import java.util.Stack;
 import org.apache.log4j.Logger;
 
 public class PortManager {
-	private static final int INITPORT				= 9403;
-	private boolean isInit 							= false;
-	private Stack<Integer> ports 					= null;			
-	//系统所占有的空闲端口
-	private int maxPort 							= INITPORT;
-	private Logger logger 							= null;
+	private static final int 		INITPORT			= 9403;
+	private boolean					isInit 				= false;
+	private Stack<Integer> 			ports 				= null;			
+	private int 					maxPort 			= INITPORT;
+	private Logger 					logger 				= null;
 	
 	private PortManager (){};
 	
@@ -37,6 +36,7 @@ public class PortManager {
 	 * @return int
 	 */
 	public int getPort() {
+		init();
 		if (ports.size() > 0) {
 			return ports.pop();
 		}else {

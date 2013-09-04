@@ -46,6 +46,10 @@ public class SettingManager {
 				properties.put(
 						Setting.DataOutPort, 
 						String.valueOf(Setting.int_DataOutPort));
+				
+				properties.put(Setting.UserName, Setting.str_USerName);
+				properties.put(Setting.Password, Setting.str_Password);
+				
 				properties.store(new FileWriter(settingFile), "");
 				logger.info("Default setting...\n"
 						+ "if you want to change the setting, \n"
@@ -79,7 +83,9 @@ public class SettingManager {
 	private boolean checkProperty(Properties properties) {
 		if (properties != null 
 				&& properties.get(Setting.DataInPort) != null
-				&& properties.get(Setting.DataOutPort) != null) {
+				&& properties.get(Setting.DataOutPort) != null
+				&& properties.get(Setting.UserName) != null
+				&& properties.get(Setting.Password) != null) {
 			try {
 				Setting.int_DataInPort = 
 						Integer.valueOf(
@@ -87,6 +93,8 @@ public class SettingManager {
 				Setting.int_DataOutPort = 
 						Integer.valueOf(
 								properties.getProperty(Setting.DataOutPort));
+				Setting.str_USerName = properties.getProperty(Setting.UserName);
+				Setting.str_Password = properties.getProperty(Setting.Password);
 				return true;
 			} catch (Exception e) {
 				e.printStackTrace();

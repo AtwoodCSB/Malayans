@@ -1,13 +1,15 @@
 package iot.mike.malayans.rmimanager;
 
+import iot.mike.malayans.rmimanager.autorunner.AutoRunManager;
 import iot.mike.malayans.rmimanager.ports.PortManager;
 import iot.mike.malayans.rmimanager.register.RegisterManager;
 import iot.mike.malayans.rmimanager.setting.SettingManager;
 
 public class RMIManager {
-	private SettingManager settingManager				= null;
-	private RegisterManager registerManager				= null;
-	private PortManager portManager						= null;
+	private SettingManager 			settingManager				= null;
+	private RegisterManager		 	registerManager				= null;
+	private PortManager 			portManager					= null;
+	private AutoRunManager 			autoRunManager				= null;
 	
 	private static final String DESCRIPTION	= 
 			"这是管理所有模块的模块，也是系统的核心，就是这样！";
@@ -16,6 +18,7 @@ public class RMIManager {
 		settingManager = SettingManager.getInstance();
 		registerManager = RegisterManager.getInstance();
 		portManager = PortManager.getInstance();
+		autoRunManager = AutoRunManager.getInstance();
 	}
 	
 	private static class RMIManagerHolder {
@@ -27,6 +30,7 @@ public class RMIManager {
 	}
 	
 	public void start() {
+		autoRunManager.start();
 		registerManager.start();
 	}
 
@@ -34,7 +38,6 @@ public class RMIManager {
 	}
 
 	public void stop() {
-		
 	}
 
 	public String getStatus() {
@@ -53,6 +56,7 @@ public class RMIManager {
 		settingManager.init();
 		registerManager.init();
 		portManager.init();
+		autoRunManager.init();
 	}
 	
 	public static void main(String[] args) {
